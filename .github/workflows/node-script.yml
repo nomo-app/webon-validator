@@ -1,0 +1,24 @@
+name: WebOn Validations
+
+on:
+  push:  # Triggers on push events
+    branches: 
+      - '**'  # Run on any branch
+  schedule:
+    - cron: '0 5 * * *'  # Runs at 05:00 UTC every day
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Run index.mjs
+      run: node index.mjs

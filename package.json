@@ -1,0 +1,8 @@
+{
+  "name": "webon-validator",
+  "version": "1.0.0",
+  "main": "index.mjs",
+  "scripts": {
+    "test": "node index.mjs"
+  }
+}
