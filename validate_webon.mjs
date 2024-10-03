@@ -6,10 +6,12 @@ export async function validateWebOn(args) {
   try {
     const res = await fetch(manifestURL);
     manifest = await res.json();
+    manifest.webon_url = manifestURL;
   } catch (error1) {
     try {
       const res = await fetch(fallbackManifestURL);
       manifest = await res.json();
+      manifest.webon_url = fallbackManifestURL;
     } catch (error2) {
       throw new Error(
         `Failed to fetch ${manifestURL} or ${fallbackManifestURL}: ${error1.message}`
@@ -17,6 +19,34 @@ export async function validateWebOn(args) {
     }
   }
   validateManifest(manifest);
+  await validateIcon(manifest);
+}
+
+async function validateIcon(manifest) {
+  const iconUrl = getIconUrl(manifest);
+  try {
+    const res = await fetch(iconUrl);
+    if (!res.ok) {
+      throw new Error(`Failed to fetch ${iconUrl}: ${res.statusText}`);
+    }
+  } catch (error) {
+    throw new Error(`Failed to fetch ${iconUrl}`);
+  }
+}
+
+function getIconUrl(manifest) {
+  const webon_icon = manifest.webon_icon;
+  if (!webon_icon) {
+    const url = new URL(manifest.webon_url);
+    url.pathname = "/nomo_icon.svg";
+    return url.toString();
+  } else if (!webon_icon.startsWith("http")) {
+    const url = new URL(manifest.webon_url);
+    url.pathname = webon_icon;
+    return url.toString();
+  } else {
+    return webon_icon;
+  }
 }
 
 function validateManifest(manifest) {
