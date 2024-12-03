@@ -24,13 +24,22 @@ export async function validateWebOn(args) {
 
 async function validateIcon(manifest) {
   const iconUrl = getIconUrl(manifest);
+  let data;
   try {
     const res = await fetch(iconUrl);
     if (!res.ok) {
       throw new Error(`Failed to fetch ${iconUrl}: ${res.statusText}`);
     }
+    data = await res.blob();
   } catch (error) {
     throw new Error(`Failed to fetch ${iconUrl}`);
+  }
+  const maxIconSize = 200 * 1024;
+  if (!data.size) {
+    throw new Error(`${iconUrl} is empty`);
+  }
+  if (data.size > maxIconSize) {
+    throw new Error(`${iconUrl} is too large: ${data.size} bytes`);
   }
 }
 
