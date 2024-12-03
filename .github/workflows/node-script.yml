@@ -1,6 +1,7 @@
 name: WebOn Validations
 
 on:
+  workflow_dispatch:  # Allows manual triggering of the workflow
   push:  # Triggers on push events
     branches: 
       - '**'  # Run on any branch
