@@ -47,7 +47,7 @@ function getIconUrl(manifest) {
   const webon_icon = manifest.webon_icon;
   if (!webon_icon) {
     const url = new URL(manifest.webon_url);
-    url.pathname = "/nomo_icon.svg";
+    url.pathname = "/nomo_icon.png";
     return url.toString();
   } else if (!webon_icon.startsWith("http")) {
     const url = new URL(manifest.webon_url);
